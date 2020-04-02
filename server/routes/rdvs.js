@@ -23,7 +23,7 @@ router.post('/:secId/addRdv', async (req,res) => {
     const sec = await Sec.findById(secId);
     NewRdvs.secretaire = sec;
 
-    await NewRdvs.save((resualt, err) => {
+    await NewRdvs.save((err, resualt) => {
         if(err){
             console.log(err);
             return;

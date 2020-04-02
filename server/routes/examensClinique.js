@@ -21,7 +21,7 @@ router.post('/addExamCln', async (req,res) => {
 
     });
 
-    await NewExamClinique.save((resualt, err) => {
+    await NewExamClinique.save((err, resualt) => {
         if(err){
             console.log(err);
             return;
@@ -30,6 +30,48 @@ router.post('/addExamCln', async (req,res) => {
     });
     res.status(201).json(NewExamClinique);
 
+});
+
+// Modifier Examen Clinique
+router.put('/updateExamenCln/:exmCId' , (req,res) => {
+
+    const ID = req.params.exmCId;
+    const UpdatedExamenCln = {
+        geniral: req.body.geniral,
+        rmqGeneral: req.body.rmqGeneral,
+        appareil: req.body.appareil,
+        rmqAppr : req.body.rmqAppr,
+        consultation : req.body.consultation
+    }
+    ExmCln.updateOne( {_id : ID} , {$set : UpdatedExamenCln} , (err, result)=>{
+        if(err){
+            console.log(err);
+            res.status(500).json({
+                error: err
+            });
+            return;
+        }
+        console.log(result);
+        res.status(500).json(result);
+    });
+
+});
+
+// Supprimer Examen Clinique
+
+router.delete('/deleteExamenCln/:exmCId', (req,res) => {
+    const ID = req.params.exmCId;
+    ExmCln.deleteOne({ _id : ID },(err, result) => {
+        if(err){
+            console.log(err);
+            res.status(500).json({
+                error : err
+            });
+            return;
+        }
+        console.log(result);
+        res.status(500).json(result);
+    })
 });
 
 

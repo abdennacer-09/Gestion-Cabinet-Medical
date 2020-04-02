@@ -26,7 +26,7 @@ router.post('/:secId/addCons', async (req,res) => {
     const sec = await Sec.findById(secId);
     NewConsultation.secretaire = sec;
 
-    await NewConsultation.save((resualt, err) => {
+    await NewConsultation.save((err, resualt) => {
         if(err){
             console.log(err);
             return;
@@ -35,6 +35,48 @@ router.post('/:secId/addCons', async (req,res) => {
     });
     res.status(201).json(NewConsultation);
 
+});
+
+// Modifier Consultation
+router.put('/:secId/updateConsultation/:consId' , (req,res) => {
+
+    const ID = req.params.consId;
+    const UpdatedConsultation = {
+        date: req.body.date,
+        type: req.body.type,
+        patient: req.body.patient,
+        categorie : req.body.categorie,
+        status : req.body.status
+    }
+    Cons.updateOne( {_id : ID} , {$set : UpdatedConsultation} , (err, result)=>{
+        if(err){
+            console.log(err);
+            res.status(500).json({
+                error: err
+            });
+            return;
+        }
+        console.log(result);
+        res.status(500).json(result);
+    });
+
+});
+
+// Supprimer Consultation
+
+router.delete('/:secId/deleteConsultation/:consId', (req,res) => {
+    const ID = req.params.consId;
+    Cons.deleteOne({ _id : ID },(err, result) => {
+        if(err){
+            console.log(err);
+            res.status(500).json({
+                error : err
+            });
+            return;
+        }
+        console.log(result);
+        res.status(500).json(result);
+    })
 });
 
 

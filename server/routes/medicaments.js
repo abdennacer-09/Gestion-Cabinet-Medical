@@ -17,7 +17,7 @@ router.post('/addMedic', async (req,res) => {
     });
 
 
-    await NewMedicament.save((resualt, err) => {
+    await NewMedicament.save((err, resualt) => {
         if(err){
             console.log(err);
             return;
@@ -26,6 +26,45 @@ router.post('/addMedic', async (req,res) => {
     });
     res.status(201).json(NewMedicament);
 
+});
+
+// Modifier Medicament
+router.put('/updateMedic/:medicId' , (req,res) => {
+
+    const ID = req.params.medicId;
+    const UpdatedMedicament = {
+        nom: req.body.nom,
+        posologie: req.body.posologie
+    }
+    Medic.updateOne( {_id : ID} , {$set : UpdatedMedicament} , (err, result)=>{
+        if(err){
+            console.log(err);
+            res.status(500).json({
+                error: err
+            });
+            return;
+        }
+        console.log(result);
+        res.status(500).json(result);
+    });
+
+});
+
+// Supprimer Medicament
+
+router.delete('/deleteMedic/:medicId', (req,res) => {
+    const ID = req.params.medicId;
+    Medic.deleteOne({ _id : ID },(err, result) => {
+        if(err){
+            console.log(err);
+            res.status(500).json({
+                error : err
+            });
+            return;
+        }
+        console.log(result);
+        res.status(500).json(result);
+    })
 });
 
 module.exports = router;

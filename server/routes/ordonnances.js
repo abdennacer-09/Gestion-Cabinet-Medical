@@ -21,7 +21,7 @@ router.post('/addOrdns', async (req,res) => {
         consultation: req.body.consultation
     });
 
-    await NewOrdonnace.save((resualt, err) => {
+    await NewOrdonnace.save((err, resualt) => {
         if(err){
             console.log(err);
             return;
@@ -30,6 +30,51 @@ router.post('/addOrdns', async (req,res) => {
     });
     res.status(201).json(NewOrdonnace);
 
+});
+
+// Modifier Ordonnance
+router.put('/updateOrdns/:ordnsId' , (req,res) => {
+
+    const ID = req.params.ordnsId;
+    const UpdatedOrdonnance = {
+        quantite: req.body.quantite,
+        prise: req.body.prise,
+        periode: req.body.periode,
+        nbrParJour: req.body.nbrParJour,
+        quand: req.body.quand,
+        remarque: req.body.remarque,
+        medicament: req.body.medicament,
+        consultation: req.body.consultation
+    }
+    Ordns.updateOne( {_id : ID} , {$set : UpdatedOrdonnance} , (err, result)=>{
+        if(err){
+            console.log(err);
+            res.status(500).json({
+                error: err
+            });
+            return;
+        }
+        console.log(result);
+        res.status(500).json(result);
+    });
+
+});
+
+// Supprimer Ordonnance
+
+router.delete('/deleteOrdns/:ordnsId', (req,res) => {
+    const ID = req.params.ordnsId;
+    Ordns.deleteOne({ _id : ID },(err, result) => {
+        if(err){
+            console.log(err);
+            res.status(500).json({
+                error : err
+            });
+            return;
+        }
+        console.log(result);
+        res.status(500).json(result);
+    })
 });
 
 module.exports = router;
